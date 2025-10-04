@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>待辦事項</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="./styles/style.css">
+</head>
+<body>
+  <div id="app" class="container">
+    <h1>TO DO LIST</h1>
+    <div class="card input">
+      <input type="text" placeholder="請輸入待辦事項" v-model="newTodo" @keyup.enter="addTodo">
+      <a href="#" class="btn_add" @click.prevent="addTodo">+</a>
+    </div>
+
+    <div class="card card_list">
+      <ul class="tab">
+        <li :class="{ active: currentTab === 'all'}" @click="currentTab = 'all'">全部</li>
+        <li :class="{ active: currentTab === 'active'}" @click="currentTab = 'active'">待完成</li>
+        <li :class="{ active: currentTab === 'completed'}" @click="currentTab = 'completed'">已完成</li>
+      </ul>
+
+      <div class="cart_content">
+        <ul class="list">
+          <li v-for="todo in filteredTodos" :key="todo.id">
+            <label class="checkbox">
+              <input
+                type="checkbox"
+                v-model="todo.completed">
+              <span :style="{ textDecoration: todo.completed ? 'line-through' : 'none'}"> {{ todo.text }}</span>
+            </label>
+            <a href="#" class="delete" @click.prevent="deleteTodo(todo.id)">
+              <i class="fa-solid fa-trash"></i>
+            </a>
+          </li>
+        </ul>
+        <div class="list_footer" v-if="todos.length > 0">
+          <p>
+            <span v-if="todos.length === 0">尚無待辦事項</span>
+            <span v-else-if="todos.every(todo => todo.completed)">全部完成！🎉</span>
+            <span v-else> {{ todos.filter(todo => !todo.completed).length }} 個待完成項目</span>
+          </p>
+          <a href="#" class="clear_done" @click.prevent="clearCompleted">清除已完成項目</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="./scripts/all.js"></script>
+</body>
+</html>
